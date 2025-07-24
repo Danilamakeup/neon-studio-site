@@ -2,231 +2,262 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Neon Studio</title>
+  <title>Neon Studio — Всё в одном</title>
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      color: #fff;
-      text-align: center;
       background: linear-gradient(270deg, #0a0a1a, #1a0033, #220044, #0a0a1a);
       background-size: 800% 800%;
-      animation: animatedBackground 20s ease infinite;
+      animation: bgMove 20s ease infinite;
+      color: white;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
     }
 
-    @keyframes animatedBackground {
+    @keyframes bgMove {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
 
-    h1 {
-      font-size: 3em;
-      margin-top: 60px;
-      color: #9f6bff;
-      text-shadow: 0 0 10px #9f6bff, 0 0 20px #9f6bff;
+    .chat-container {
+      width: 350px;
+      background: rgba(20, 20, 40, 0.95);
+      border-right: 2px solid #9f6bff;
+      display: flex;
+      flex-direction: column;
     }
 
-    .section {
-      margin: 60px auto;
-      max-width: 800px;
+    .chat-header {
+      padding: 16px;
+      background: #9f6bff;
+      color: #000;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      font-size: 0.95em;
+    }
+
+    .chat-input {
+      padding: 10px;
+      border-top: 1px solid #9f6bff;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .chat-input input, .chat-input textarea {
+      background: #111;
+      border: 1px solid #9f6bff;
+      border-radius: 8px;
+      color: white;
+      padding: 8px;
+      resize: none;
+    }
+
+    .chat-input button {
+      padding: 8px;
+      border: none;
+      background: #9f6bff;
+      color: black;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .chat-input button:hover {
+      background: white;
+      color: black;
+    }
+
+    .message {
+      margin-bottom: 10px;
+      background: rgba(255,255,255,0.05);
+      padding: 6px 10px;
+      border-radius: 8px;
+    }
+
+    .message strong {
+      color: #9f6bff;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
     }
 
     .card {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255,255,255,0.05);
       border: 1px solid #9f6bff;
-      border-radius: 16px;
-      padding: 20px;
-      margin: 20px;
-      box-shadow: 0 0 15px #9f6bff;
-      transition: transform 0.3s ease;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 20px;
+      transition: 0.3s;
     }
 
     .card:hover {
-      transform: scale(1.05);
+      transform: scale(1.03);
     }
 
-    .button {
-      background: transparent;
+    .card h2 {
       color: #9f6bff;
-      border: 1px solid #9f6bff;
-      border-radius: 8px;
-      padding: 8px 14px;
-      cursor: pointer;
-      font-size: 0.95em;
-      margin: 10px 5px;
-      transition: 0.3s ease;
     }
 
-    .button:hover {
-      background: #9f6bff;
-      color: #000;
-      transform: scale(1.05);
-    }
-
-    .lang-button {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 999;
-    }
-
-    .support-floating-btn {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      background: #9f6bff;
-      color: #000;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 20px;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 0 10px #9f6bff;
-      z-index: 1000;
-    }
-
-    .support-popup {
-      display: none;
-      position: fixed;
-      bottom: 90px;
-      right: 30px;
-      width: 320px;
-      background: rgba(10, 10, 30, 0.95);
-      border: 1px solid #9f6bff;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 0 20px #9f6bff;
-      z-index: 1001;
-      color: white;
-      text-align: left;
-      opacity: 0;
-      transform: scale(0.9);
-      transition: opacity 0.3s ease, transform 0.3s ease;
-    }
-
-    .support-popup.show {
-      display: block;
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    .popup-close {
-      position: absolute;
-      top: 8px;
-      right: 12px;
-      color: #9f6bff;
-      cursor: pointer;
-      font-size: 18px;
-    }
-
-    .support-popup input,
-    .support-popup textarea,
-    .support-popup input[type="file"] {
+    input, textarea {
       width: 100%;
-      margin: 10px 0;
       background: #111;
-      color: #fff;
       border: 1px solid #9f6bff;
-      border-radius: 10px;
+      color: white;
+      border-radius: 6px;
       padding: 8px;
+      margin: 5px 0;
+    }
+
+    .btn {
+      padding: 8px 14px;
+      background: #9f6bff;
+      border: none;
+      color: black;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: white;
+    }
+
+    a.download-btn {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 12px;
+      border: 1px solid #9f6bff;
+      color: #9f6bff;
+      text-decoration: none;
+      border-radius: 6px;
+    }
+
+    a.download-btn:hover {
+      background: #9f6bff;
+      color: black;
     }
   </style>
 </head>
 <body>
 
-  <button class="button lang-button" onclick="alert('Языковая версия в разработке')">🌐 RU / EN</button>
+  <div class="chat-container">
+    <div class="chat-header">💬 Neo-Studio Chat</div>
+    <div class="chat-messages" id="chatBox"></div>
+    <div class="chat-input">
+      <input type="text" id="nickname" placeholder="Твой ник">
+      <textarea id="messageInput" rows="2" placeholder="Напиши сообщение..."></textarea>
+      <button onclick="sendMessage()">Отправить</button>
+    </div>
+  </div>
 
-  <h1>Neon Studio</h1>
-
-  <div class="section">
-
+  <div class="main-content">
     <div class="card">
       <h2>📥 Скачать скрипт</h2>
       <p>Работает с любыми Roblox-инжекторами</p>
-      <a href="Финал Скрипт.txt" download class="button">📥 Скачать скрипт (.txt)</a>
-      <p style="font-size: 0.9em; color: #aaa;">Скопируй содержимое и вставь в инжектор</p>
+      <a href="Финал Скрипт.txt" class="download-btn" download>📄 Скачать .txt</a>
+      <p style="font-size: 0.9em;">Открой .txt, скопируй и вставь в инжектор</p>
     </div>
 
     <div class="card">
-      <h2>🎮 Игры от подписчиков</h2>
-      <input type="text" id="gameAuthor" placeholder="Твоё имя">
+      <h2>📣 Отзыв</h2>
+      <input type="text" id="reviewName" placeholder="Твоё имя">
+      <textarea id="reviewText" placeholder="Оставь отзыв..."></textarea>
+      <input type="file" id="reviewFile" accept="image/*">
+      <button class="btn" onclick="sendReview()">Отправить отзыв</button>
+    </div>
+
+    <div class="card">
+      <h2>🎮 Игра от подписчика</h2>
+      <input type="text" id="gameName" placeholder="Твоё имя">
       <textarea id="gameDesc" placeholder="Описание игры..."></textarea>
-      <input type="text" id="gameLink" placeholder="Ссылка (Google Drive, Mega и т.п.)">
+      <input type="text" id="gameLink" placeholder="Ссылка на файл (Яндекс, Mega и т.д.)">
       <input type="file" id="gameFile">
-      <button class="button" onclick="sendGame()">Отправить</button>
+      <button class="btn" onclick="sendGame()">Отправить игру</button>
     </div>
-
-    <div class="card">
-      <h2>💬 Чат Neon Studio (Discord)</h2>
-      <iframe src="https://discord.com/widget?id=1396740425091518474&theme=dark"
-              width="100%" height="500" allowtransparency="true" frameborder="0"
-              sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts">
-      </iframe>
-    </div>
-
-  </div>
-
-  <!-- Кнопка поддержки -->
-  <button class="support-floating-btn" onclick="togglePopup()">✉️ Написать отзыв</button>
-
-  <!-- Окно отзыва -->
-  <div class="support-popup" id="supportPopup">
-    <div class="popup-close" onclick="togglePopup()">✖</div>
-    <h3>Отзыв</h3>
-    <input type="text" id="popupName" placeholder="Твоё имя">
-    <textarea id="popupMessage" placeholder="Оставь отзыв..."></textarea>
-    <label style="font-size: 0.9em;">Прикрепить скриншот:</label>
-    <input type="file" id="popupImage" accept="image/*">
-    <button class="button" onclick="sendSupport()">Отправить</button>
   </div>
 
   <script>
-    function togglePopup() {
-      const popup = document.getElementById("supportPopup");
-      if (popup.classList.contains("show")) {
-        popup.classList.remove("show");
-        setTimeout(() => popup.style.display = "none", 300);
-      } else {
-        popup.style.display = "block";
-        setTimeout(() => popup.classList.add("show"), 10);
-      }
+    function sendMessage() {
+      const nick = document.getElementById("nickname").value.trim();
+      const msg = document.getElementById("messageInput").value.trim();
+      if (!nick || !msg) return alert("Введите имя и сообщение!");
+      const fullMsg = { user: nick, text: msg, time: Date.now() };
+      saveMessage(fullMsg);
+      displayMessage(fullMsg);
+      document.getElementById("messageInput").value = "";
     }
 
-    function sendSupport() {
-      const username = document.getElementById("popupName").value.trim();
-      const message = document.getElementById("popupMessage").value.trim();
-      const fileInput = document.getElementById("popupImage");
+    function saveMessage(msg) {
+      const history = JSON.parse(localStorage.getItem("chatHistory") || "[]");
+      history.push(msg);
+      localStorage.setItem("chatHistory", JSON.stringify(history.slice(-100)));
+    }
 
-      if (!username || !message) return alert("Заполни имя и отзыв.");
+    function displayMessage(msg) {
+      const div = document.createElement("div");
+      div.className = "message";
+      const date = new Date(msg.time).toLocaleTimeString();
+      div.innerHTML = `<strong>${msg.user}</strong> <small>${date}</small><br>${msg.text}`;
+      document.getElementById("chatBox").appendChild(div);
+      document.getElementById("chatBox").scrollTop = document.getElementById("chatBox").scrollHeight;
+    }
 
-      const formData = new FormData();
-      formData.append("content", `📝 Отзыв от: ${username}\n${message}`);
-      if (fileInput.files.length > 0) formData.append("file", fileInput.files[0]);
+    function loadMessages() {
+      const history = JSON.parse(localStorage.getItem("chatHistory") || "[]");
+      document.getElementById("chatBox").innerHTML = "";
+      history.forEach(displayMessage);
+    }
+
+    loadMessages();
+
+    function sendReview() {
+      const name = document.getElementById("reviewName").value.trim();
+      const text = document.getElementById("reviewText").value.trim();
+      const file = document.getElementById("reviewFile").files[0];
+
+      if (!name || !text) return alert("Имя и отзыв обязательны.");
+
+      const data = new FormData();
+      data.append("content", `📝 Отзыв от: ${name}\n${text}`);
+      if (file) data.append("file", file);
 
       fetch("https://discord.com/api/webhooks/1396744730473136241/mZr3UP1-sVPwLbhknbssvEU5JYPbztIOJCn3OF8JzXVZJgGeoK63WecVkoW3L3ebCb5v", {
         method: "POST",
-        body: formData
-      }).then(res => alert(res.ok ? "Отправлено!" : "Ошибка при отправке"));
+        body: data
+      }).then(r => alert(r.ok ? "Отправлено!" : "Ошибка отправки"));
     }
 
     function sendGame() {
-      const author = document.getElementById("gameAuthor").value.trim();
+      const name = document.getElementById("gameName").value.trim();
       const desc = document.getElementById("gameDesc").value.trim();
       const link = document.getElementById("gameLink").value.trim();
       const file = document.getElementById("gameFile").files[0];
-      if (!author || !desc) return alert("Имя и описание обязательны.");
 
-      const formData = new FormData();
-      let content = `🎮 Игра от: ${author}\nОписание: ${desc}`;
+      if (!name || !desc) return alert("Имя и описание обязательны.");
+
+      const data = new FormData();
+      let content = `🎮 Игра от: ${name}\nОписание: ${desc}`;
       if (link) content += `\n🔗 Ссылка: ${link}`;
-      formData.append("content", content);
-      if (file) formData.append("file", file);
+      data.append("content", content);
+      if (file) data.append("file", file);
 
       fetch("https://discord.com/api/webhooks/1396753674805448814/nz56x-Grxu7JQ4k0SwW6ansdQlKuSuCzczVQodm2AZ6asTvLJ_i2IJNBDv5JqdUlOPbE", {
         method: "POST",
-        body: formData
-      }).then(res => alert(res.ok ? "Игра отправлена!" : "Ошибка при отправке"));
+        body: data
+      }).then(r => alert(r.ok ? "Игра отправлена!" : "Ошибка отправки"));
     }
   </script>
 
