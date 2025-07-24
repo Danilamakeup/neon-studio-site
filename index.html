@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Neon Studio</title>
   <style>
     body {
@@ -11,7 +11,6 @@
       background-size: 800% 800%;
       animation: animatedBG 20s ease infinite;
       color: white;
-      overflow-x: hidden;
     }
 
     @keyframes animatedBG {
@@ -22,13 +21,13 @@
 
     h1 {
       text-align: center;
-      margin-top: 40px;
+      margin-top: 30px;
       color: #9f6bff;
       text-shadow: 0 0 10px #9f6bff;
     }
 
     .container {
-      max-width: 900px;
+      max-width: 1000px;
       margin: 0 auto;
       padding: 20px;
     }
@@ -60,6 +59,7 @@
       border: 1px solid #9f6bff;
       border-radius: 8px;
       margin-top: 8px;
+      font-size: 1em;
     }
 
     .btn {
@@ -79,13 +79,21 @@
       background: white;
     }
 
-    #chatBox {
-      max-height: 300px;
-      overflow-y: auto;
-      background: rgba(255,255,255,0.03);
-      padding: 10px;
-      border-radius: 10px;
+    #chatWrapper {
+      display: flex;
+      flex-direction: column;
+      height: 400px;
       border: 1px solid #9f6bff;
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.05);
+    }
+
+    #chatMessages {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      font-size: 0.95em;
     }
 
     .message {
@@ -100,6 +108,32 @@
       color: #9f6bff;
     }
 
+    #chatInput {
+      display: flex;
+      gap: 10px;
+      padding: 10px;
+      background: rgba(0,0,0,0.3);
+    }
+
+    #chatInput input {
+      flex: 1;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #9f6bff;
+      background: #111;
+      color: white;
+    }
+
+    #chatInput button {
+      padding: 8px 16px;
+      border: none;
+      background: #9f6bff;
+      color: black;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
     iframe {
       display: none;
     }
@@ -112,131 +146,124 @@
     <!-- ЧАТ -->
     <div class="card">
       <h2>💬 Чат</h2>
-      <input type="text" id="nickname" placeholder="Твой никнейм">
-      <textarea id="messageInput" placeholder="Сообщение..." rows="2"></textarea>
-      <button class="btn" onclick="sendMessage()">📨 Отправить</button>
-      <div id="chatBox"></div>
+      <div id="chatWrapper">
+        <div id="chatMessages"></div>
+        <div id="chatInput">
+          <input type="text" id="chatName" placeholder="Твой ник">
+          <input type="text" id="chatText" placeholder="Сообщение...">
+          <button onclick="sendChat()">▶</button>
+        </div>
+      </div>
     </div>
-
-    <!-- КНОПКА МУЗЫКИ -->
-    <div class="card">
-      <h2>🎵 Фоновая музыка</h2>
-      <button class="btn" onclick="playMusic()">▶️ Включить музыку</button>
-    </div>
-
     <!-- СКРИПТ -->
     <div class="card">
       <h2>📥 Скачать скрипт</h2>
-      <p>Открой .txt файл и вставь в инжектор</p>
       <a href="Финал Скрипт.txt" download class="btn">📄 Скачать .txt</a>
     </div>
 
     <!-- ОТЗЫВ -->
     <div class="card">
-      <h2>📝 Оставить отзыв</h2>
-      <input type="text" id="reviewName" placeholder="Ваше имя/никнейм">
-      <textarea id="reviewText" placeholder="Твой отзыв..."></textarea>
+      <h2>📝 Отзыв</h2>
+      <input type="text" id="reviewName" placeholder="Ваше имя/ник">
+      <textarea id="reviewText" placeholder="Ваш отзыв..."></textarea>
       <input type="file" id="reviewFile">
-      <button class="btn" onclick="sendReview()">Отправить отзыв</button>
+      <button class="btn" onclick="sendWebhook('reviewName','reviewText','reviewFile','https://discord.com/api/webhooks/1396744730473136241/mZr3UP1-sVPwLbhknbssvEU5JYPbztIOJCn3OF8JzXVZJgGeoK63WecVkoW3L3ebCb5v')">Отправить</button>
     </div>
 
-    <!-- ИГРА ОТ ПОДПИСЧИКА -->
+    <!-- ИГРА -->
     <div class="card">
       <h2>🎮 Игра от подписчика</h2>
-      <input type="text" id="gameName" placeholder="Ваше имя/никнейм">
+      <input type="text" id="gameName" placeholder="Ваше имя/ник">
       <textarea id="gameDesc" placeholder="Описание игры..."></textarea>
-      <input type="text" id="gameLink" placeholder="Ссылка (Google/Mega и т.п.)">
+      <input type="text" id="gameLink" placeholder="Ссылка (Google Drive, Mega и т.п.)">
       <input type="file" id="gameFile">
-      <button class="btn" onclick="sendGame()">Отправить игру</button>
+      <button class="btn" onclick="sendGame()">Отправить</button>
     </div>
 
-    <!-- БАГИ -->
+    <!-- БАГ -->
     <div class="card">
       <h2>🐞 Сообщить о баге</h2>
-      <input type="text" id="bugName" placeholder="Ваше имя/никнейм">
-      <textarea id="bugDesc" placeholder="Опишите где баг (в игре, сайте и т.д.)"></textarea>
+      <input type="text" id="bugName" placeholder="Ваше имя/ник">
+      <textarea id="bugDesc" placeholder="Где баг? (сайт/игра и т.д.)"></textarea>
       <input type="file" id="bugFile">
-      <button class="btn" onclick="sendBug()">Отправить баг</button>
+      <button class="btn" onclick="sendWebhook('bugName','bugDesc','bugFile','https://discord.com/api/webhooks/1396858162979799173/1pjXR2m9ZN9-F4ipPrROyqplzu-RB95wtrx7y5EfWAJ6dB_1GnLgJLZ_5KDosacfxRrn')">Отправить</button>
     </div>
 
-    <!-- ВОПРОС/ИДЕЯ -->
+    <!-- ВОПРОС / ИДЕЯ -->
     <div class="card">
       <h2>💡 Вопрос или идея</h2>
-      <input type="text" id="ideaName" placeholder="Ваше имя/никнейм">
-      <textarea id="ideaText" placeholder="Какой вопрос или идею хотите написать?"></textarea>
+      <input type="text" id="ideaName" placeholder="Ваше имя/ник">
+      <textarea id="ideaText" placeholder="Ваш вопрос или идея..."></textarea>
       <input type="file" id="ideaFile">
-      <button class="btn" onclick="sendIdea()">Отправить</button>
+      <button class="btn" onclick="sendWebhook('ideaName','ideaText','ideaFile','https://discord.com/api/webhooks/1396858162979799173/1pjXR2m9ZN9-F4ipPrROyqplzu-RB95wtrx7y5EfWAJ6dB_1GnLgJLZ_5KDosacfxRrn')">Отправить</button>
     </div>
 
+    <!-- МУЗЫКА -->
+    <div class="card">
+      <h2>🎵 Музыка</h2>
+      <button class="btn" onclick="playMusic()">▶️ Включить фонк</button>
+    </div>
   </div>
 
-  <iframe id="ytMusic" src="" allow="autoplay" frameborder="0"></iframe>
+  <iframe id="ytMusic" allow="autoplay" frameborder="0"></iframe>
 
-<script>
-  function sendMessage() {
-    const nick = document.getElementById("nickname").value.trim();
-    const msg = document.getElementById("messageInput").value.trim();
-    if (!nick || !msg) return alert("Введите имя и сообщение!");
-    const box = document.getElementById("chatBox");
-    const time = new Date().toLocaleTimeString();
-    const div = document.createElement("div");
-    div.className = "message";
-    div.innerHTML = `<strong>${nick}</strong> <small>${time}</small><br>${msg}`;
-    box.appendChild(div);
-    box.scrollTop = box.scrollHeight;
-    document.getElementById("messageInput").value = "";
-  }
+  <script>
+    // ЧАТ
+    function sendChat() {
+      const name = document.getElementById('chatName').value.trim();
+      const msg = document.getElementById('chatText').value.trim();
+      if (!name || !msg) return;
+      const chat = document.getElementById('chatMessages');
+      const div = document.createElement('div');
+      div.className = 'message';
+      const time = new Date().toLocaleTimeString();
+      div.innerHTML = `<strong>${name}</strong> <small>${time}</small><br>${msg}`;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+      document.getElementById('chatText').value = '';
+    }
 
-  function playMusic() {
-    document.getElementById("ytMusic").src = "https://www.youtube.com/embed/Kii1mdfiX3Y?autoplay=1&loop=1&playlist=Kii1mdfiX3Y";
-  }
+    // ОБЩИЙ ВЕБХУК ОТПРАВКА
+    function sendWebhook(nameId, textId, fileId, url) {
+      const name = document.getElementById(nameId).value.trim();
+      const text = document.getElementById(textId).value.trim();
+      const file = document.getElementById(fileId).files[0];
+      if (!name || !text) return alert("Заполните все поля");
 
-  function sendWebhook(nameId, textId, fileId, url) {
-    const name = document.getElementById(nameId).value.trim();
-    const text = document.getElementById(textId).value.trim();
-    const file = document.getElementById(fileId).files[0];
-    if (!name || !text) return alert("Заполните все поля");
+      const form = new FormData();
+      form.append("content", `От: ${name}\n${text}`);
+      if (file) form.append("file", file);
 
-    const form = new FormData();
-    form.append("content", `От: ${name}\n${text}`);
-    if (file) form.append("file", file);
+      fetch(url, {
+        method: "POST",
+        body: form
+      }).then(r => alert(r.ok ? "✅ Отправлено!" : "❌ Ошибка"));
+    }
 
-    fetch(url, { method: "POST", body: form })
-      .then(r => alert(r.ok ? "Отправлено!" : "Ошибка отправки"));
-  }
+    // ИГРА ОТДЕЛЬНО
+    function sendGame() {
+      const name = document.getElementById("gameName").value.trim();
+      const desc = document.getElementById("gameDesc").value.trim();
+      const link = document.getElementById("gameLink").value.trim();
+      const file = document.getElementById("gameFile").files[0];
+      if (!name || !desc) return alert("Заполните имя и описание");
 
-  function sendReview() {
-    sendWebhook("reviewName", "reviewText", "reviewFile",
-      "https://discord.com/api/webhooks/1396744730473136241/mZr3UP1-sVPwLbhknbssvEU5JYPbztIOJCn3OF8JzXVZJgGeoK63WecVkoW3L3ebCb5v");
-  }
+      const form = new FormData();
+      let content = `🎮 Игра от: ${name}\nОписание: ${desc}`;
+      if (link) content += `\n🔗 Ссылка: ${link}`;
+      form.append("content", content);
+      if (file) form.append("file", file);
 
-  function sendGame() {
-    const name = document.getElementById("gameName").value.trim();
-    const desc = document.getElementById("gameDesc").value.trim();
-    const link = document.getElementById("gameLink").value.trim();
-    const file = document.getElementById("gameFile").files[0];
-    if (!name || !desc) return alert("Имя и описание обязательны.");
+      fetch("https://discord.com/api/webhooks/1396753674805448814/nz56x-Grxu7JQ4k0SwW6ansdQlKuSuCzczVQodm2AZ6asTvLJ_i2IJNBDv5JqdUlOPbE", {
+        method: "POST",
+        body: form
+      }).then(r => alert(r.ok ? "✅ Игра отправлена!" : "❌ Ошибка"));
+    }
 
-    const content = `🎮 Игра от: ${name}\nОписание: ${desc}${link ? "\n🔗 Ссылка: " + link : ""}`;
-    const form = new FormData();
-    form.append("content", content);
-    if (file) form.append("file", file);
-
-    fetch("https://discord.com/api/webhooks/1396753674805448814/nz56x-Grxu7JQ4k0SwW6ansdQlKuSuCzczVQodm2AZ6asTvLJ_i2IJNBDv5JqdUlOPbE", {
-      method: "POST", body: form
-    }).then(r => alert(r.ok ? "Игра отправлена!" : "Ошибка отправки"));
-  }
-
-  function sendBug() {
-    sendWebhook("bugName", "bugDesc", "bugFile",
-      "https://discord.com/api/webhooks/1396858162979799173/1pjXR2m9ZN9-F4ipPrROyqplzu-RB95wtrx7y5EfWAJ6dB_1GnLgJLZ_5KDosacfxRrn");
-  }
-
-  function sendIdea() {
-    sendWebhook("ideaName", "ideaText", "ideaFile",
-      "https://discord.com/api/webhooks/1396858162979799173/1pjXR2m9ZN9-F4ipPrROyqplzu-RB95wtrx7y5EfWAJ6dB_1GnLgJLZ_5KDosacfxRrn");
-  }
-</script>
-
+    // МУЗЫКА
+    function playMusic() {
+      document.getElementById("ytMusic").src = "https://www.youtube.com/embed/Kii1mdfiX3Y?autoplay=1&loop=1&playlist=Kii1mdfiX3Y";
+    }
+  </script>
 </body>
 </html>
