@@ -1,0 +1,359 @@
+-- // Roblox адский чит-соус с GUI, ESP, инвизом и болью \\ --
+
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local lp = Players.LocalPlayer
+repeat wait() until lp and lp:FindFirstChild("PlayerGui")
+
+-- Уведомление при инжекте
+game.StarterGui:SetCore("SendNotification", {
+    Title = "Твой инжектор",
+    Text = "Ну и что это за говно? хотяя УХ НИХУЯ СЕБЕ У МЕНЯ ЕСТЬ К ТЕБЕ ДОСТУП, ПИЗДА ТЕ РОДНОЙ)))",
+    Duration = 6
+})
+
+-- GUI setup
+local gui = Instance.new("ScreenGui", lp.PlayerGui)
+gui.Name = "АдскийРежим"
+gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = true
+gui.Enabled = false
+
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.new(0, 260, 0, 250)
+frame.Position = UDim2.new(0.5, -130, 0.5, -125)
+frame.BackgroundColor3 = Color3.fromRGB(200, 200, 200) -- светло-серый фон
+frame.BorderSizePixel = 0
+frame.Active = true
+frame.Draggable = true
+
+local label = Instance.new("TextLabel", frame)
+label.Size = UDim2.new(1, 0, 0, 30)
+label.Position = UDim2.new(0, 0, 0, 0)
+label.Text = "🔥 Жертва не выбрана"
+label.TextColor3 = Color3.new(0, 0, 0)
+label.BackgroundTransparency = 1
+label.Font = Enum.Font.SourceSansBold
+label.TextSize = 20
+
+local function makeButton(text, y)
+    local btn = Instance.new("TextButton", frame)
+    btn.Size = UDim2.new(1, -20, 0, 30)
+    btn.Position = UDim2.new(0, 10, 0, y)
+    btn.Text = text
+    btn.BackgroundColor3 = Color3.fromRGB(100, 100, 100) -- серые кнопки
+    btn.TextColor3 = Color3.new(1,1,1)
+    btn.Font = Enum.Font.SourceSansBold
+    btn.TextSize = 18
+    return btn
+end
+
+local startButton = makeButton("🌀 Начать мучения", 40)
+startButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+
+local allButton = makeButton("💀 Мучить всех", 75)
+allButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+
+local randomTpButton = makeButton("🎲 Рандом ТП", 110)
+randomTpButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+
+local tpToButton = makeButton("📍 ТП к цели", 145)
+tpToButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+
+local espButton = makeButton("👁 Включить есп чтобы увидеть пидагога", 180)
+espButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+espButton.TextSize = 16
+
+local invisButton = makeButton("🫥 Стать невидимкой", 215)
+invisButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+
+local sideList = Instance.new("Frame", gui)
+sideList.Size = UDim2.new(0, 160, 0, 300)
+sideList.Position = UDim2.new(1, -170, 0.5, -150)
+sideList.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+sideList.BorderSizePixel = 0
+sideList.Name = "PlayerList"
+sideList.Active = true
+sideList.Draggable = true
+
+-- Обводка RGB
+local uistroke = Instance.new("UIStroke", sideList)
+uistroke.Thickness = 2
+uistroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+uistroke.Color = Color3.fromHSV(0, 1, 1)
+
+-- RGB-перелив
+task.spawn(function()
+	local h = 0
+	while true do
+		h = (h + 0.01) % 1
+		uistroke.Color = Color3.fromHSV(h, 1, 1)
+		wait(0.03)
+	end
+end)
+
+-- Вложенный список игроков
+local scroll = Instance.new("ScrollingFrame", sideList)
+scroll.Size = UDim2.new(1, 0, 1, 0)
+scroll.BackgroundTransparency = 1
+scroll.BorderSizePixel = 0
+scroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+scroll.ScrollBarThickness = 6
+scroll.Name = "Scroll"
+
+
+local selectedName = nil
+local function updateSideList()
+    scroll:ClearAllChildren() -- правильно очищаем только список
+    local y = 0
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if plr ~= lp then
+            local item = Instance.new("TextButton", scroll) -- правильно вставляем в scroll
+            item.Size = UDim2.new(1, 0, 0, 30)
+            item.Position = UDim2.new(0, 0, 0, y)
+            item.Text = plr.Name
+            item.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+            item.TextColor3 = Color3.new(1,1,1)
+            item.Font = Enum.Font.SourceSans
+            item.TextSize = 16
+            item.MouseButton1Click:Connect(function()
+                selectedName = plr.Name
+                label.Text = "🎯 Цель: " .. plr.Name
+                game.StarterGui:SetCore("SendNotification", {
+                    Title = "Твой инжектор",
+                    Text = "Мразь, дай пожить мне немного ты сын хуйни конченной бляяяяя",
+                    Duration = 8
+                })
+            end)
+
+            local stroke = Instance.new("UIStroke", item)
+            stroke.Color = Color3.new(0, 0, 0)
+            stroke.Thickness = 1
+
+            y += 30
+        end
+    end
+    scroll.CanvasSize = UDim2.new(0, 0, 0, y)
+end
+
+
+Players.PlayerAdded:Connect(updateSideList)
+Players.PlayerRemoving:Connect(updateSideList)
+updateSideList()
+
+local guiVisible = false
+local function toggleGui()
+    guiVisible = not guiVisible
+    gui.Enabled = guiVisible
+    if guiVisible then
+        UserInputService.MouseIconEnabled = true
+        UserInputService.OverrideMouseIconBehavior = Enum.OverrideMouseIconBehavior.ForceShow
+        workspace.CurrentCamera.CameraType = Enum.CameraType.Scriptable
+        workspace.CurrentCamera.CFrame = lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") and lp.Character.HumanoidRootPart.CFrame or workspace.CurrentCamera.CFrame
+        updateSideList()
+    else
+        UserInputService.MouseIconEnabled = false
+        UserInputService.OverrideMouseIconBehavior = Enum.OverrideMouseIconBehavior.None
+        workspace.CurrentCamera.CameraType = Enum.CameraType.Custom
+    end
+end
+
+UserInputService.InputBegan:Connect(function(input, gpe)
+    if gpe then return end
+    if input.KeyCode == Enum.KeyCode.K then
+        toggleGui()
+    end
+end)
+
+-- Мучения
+local tortureRunning = {}
+local function tortureLoop(char, plr)
+    if tortureRunning[plr] then return end
+    tortureRunning[plr] = true
+    local hum = char:FindFirstChildOfClass("Humanoid")
+    local root = char:FindFirstChild("HumanoidRootPart")
+    local torso = char:FindFirstChild("Torso") or char:FindFirstChild("UpperTorso")
+    if not hum or not root or not torso then tortureRunning[plr] = nil return end
+    if not torso:FindFirstChild("🔥Fire") then
+        local fire = Instance.new("Fire", torso)
+        fire.Name = "🔥Fire"
+        fire.Heat = 10
+        fire.Size = 10
+    end
+    while hum and hum.Health > 0 and root and char.Parent do
+        root.CFrame = root.CFrame * CFrame.Angles(0, math.rad(30), 0)
+        hum.Jump = true
+        hum.Health -= 2
+        wait(0.3)
+    end
+    tortureRunning[plr] = nil
+end
+
+startButton.MouseButton1Click:Connect(function()
+    if selectedName then
+        local target = Players:FindFirstChild(selectedName)
+        if target and target ~= lp and target.Character then
+            tortureLoop(target.Character, target)
+        else
+            startButton.Text = "❗ Игрок не в игре"
+            wait(1)
+            startButton.Text = "🌀 Начать мучения"
+        end
+    else
+        startButton.Text = "❗ Выбери жертву"
+        wait(1)
+        startButton.Text = "🌀 Начать мучения"
+    end
+end)
+
+allButton.MouseButton1Click:Connect(function()
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if plr ~= lp and plr.Character then
+            tortureLoop(plr.Character, plr)
+        end
+    end
+end)
+
+randomTpButton.MouseButton1Click:Connect(function()
+    local others = {}
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if plr ~= lp and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+            table.insert(others, plr)
+        end
+    end
+    if #others > 0 and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") then
+        local target = others[math.random(1, #others)]
+        lp.Character.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame + Vector3.new(2, 0, 0)
+    end
+end)
+
+tpToButton.MouseButton1Click:Connect(function()
+    if selectedName then
+        local target = Players:FindFirstChild(selectedName)
+        if target and target ~= lp and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+            local myHRP = lp.Character and lp.Character:FindFirstChild("HumanoidRootPart")
+            if myHRP then
+                myHRP.CFrame = target.Character.HumanoidRootPart.CFrame + Vector3.new(2, 0, 0)
+            end
+        else
+            tpToButton.Text = "❗ Ошибка"
+            wait(1)
+            tpToButton.Text = "📍 ТП к цели"
+        end
+    else
+        tpToButton.Text = "❗ Нет цели"
+        wait(1)
+        tpToButton.Text = "📍 ТП к цели"
+    end
+end)
+
+-- ESP (рамка, ник, хп)
+local espEnabled = false
+local espConnections = {}
+
+local function createESP(plr)
+    local box = Drawing.new("Square")
+    box.Thickness = 1
+    box.Transparency = 1
+    box.Filled = false
+
+    local nameText = Drawing.new("Text")
+    nameText.Size = 16
+    nameText.Center = true
+    nameText.Outline = true
+    nameText.Color = Color3.new(1,1,1)
+
+    local hpBack = Drawing.new("Square")
+    hpBack.Filled = true
+    hpBack.Color = Color3.new(0,0,0)
+    hpBack.Transparency = 1
+
+    local hpBar = Drawing.new("Square")
+    hpBar.Filled = true
+    hpBar.Transparency = 1
+
+    local hue = 0
+    local run = game:GetService("RunService").RenderStepped:Connect(function()
+        if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character:FindFirstChildOfClass("Humanoid") and plr ~= lp then
+            local hrp = plr.Character.HumanoidRootPart
+            local hum = plr.Character:FindFirstChildOfClass("Humanoid")
+            local pos, onscreen = workspace.CurrentCamera:WorldToViewportPoint(hrp.Position)
+            if onscreen then
+                local dist = (lp.Character.HumanoidRootPart.Position - hrp.Position).Magnitude
+                local size = 1000 / (dist + 10)
+                local width, height = size, size * 1.5
+                local x, y = pos.X - width/2, pos.Y - height/2
+
+                hue = (hue + 0.01) % 1
+                box.Color = Color3.fromHSV(hue, 1, 1)
+                box.Size = Vector2.new(width, height)
+                box.Position = Vector2.new(x, y)
+                box.Visible = true
+
+                nameText.Text = plr.Name
+                nameText.Position = Vector2.new(pos.X, y - 16)
+                nameText.Visible = true
+
+                local hpPercent = math.clamp(hum.Health / hum.MaxHealth, 0, 1)
+                hpBack.Size = Vector2.new(4, height)
+                hpBack.Position = Vector2.new(x - 6, y)
+                hpBack.Visible = true
+
+                hpBar.Size = Vector2.new(4, height * hpPercent)
+                hpBar.Position = Vector2.new(x - 6, y + height * (1 - hpPercent))
+                hpBar.Color = Color3.fromRGB(255 - hpPercent*255, hpPercent*255, 0)
+                hpBar.Visible = true
+            else
+                box.Visible = false
+                nameText.Visible = false
+                hpBack.Visible = false
+                hpBar.Visible = false
+            end
+        else
+            box.Visible = false
+            nameText.Visible = false
+            hpBack.Visible = false
+            hpBar.Visible = false
+        end
+    end)
+
+    table.insert(espConnections, function()
+        run:Disconnect()
+        box:Remove()
+        nameText:Remove()
+        hpBack:Remove()
+        hpBar:Remove()
+    end)
+end
+
+espButton.MouseButton1Click:Connect(function()
+    if not espEnabled then
+        for _, plr in ipairs(Players:GetPlayers()) do
+            if plr ~= lp then
+                createESP(plr)
+            end
+        end
+        espEnabled = true
+        espButton.Text = "👁 ЕСП включен"
+    else
+        for _, d in ipairs(espConnections) do d() end
+        espConnections = {}
+        espEnabled = false
+        espButton.Text = "👁 Включить есп чтобы увидеть пидагога"
+    end
+end)
+
+-- Инвиз
+local invisible = false
+invisButton.MouseButton1Click:Connect(function()
+    if not lp.Character then return end
+    for _, part in ipairs(lp.Character:GetDescendants()) do
+        if part:IsA("BasePart") or part:IsA("Decal") then
+            part.Transparency = invisible and 0 or 1
+        elseif part:IsA("Accessory") and part:FindFirstChild("Handle") then
+            part.Handle.Transparency = invisible and 0 or 1
+        end
+    end
+    invisible = not invisible
+    invisButton.Text = invisible and "👁 Стать видимым" or "🫥 Стать невидимкой"
+end)
