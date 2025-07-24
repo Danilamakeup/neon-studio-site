@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Neon Studio Supreme</title>
+  <title>Neon Studio Supreme++</title>
   <style>
     body {
       margin: 0;
@@ -75,11 +75,13 @@
       border-radius: 6px;
       cursor: pointer;
       font-size: 0.9em;
+      transition: transform 0.2s;
     }
 
     .chat-input button:hover {
       background: white;
       color: black;
+      transform: scale(1.05);
     }
 
     .message {
@@ -107,6 +109,11 @@
       border-radius: 12px;
       padding: 15px;
       margin-bottom: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
     }
 
     .card h2 {
@@ -131,10 +138,12 @@
       font-weight: bold;
       border-radius: 6px;
       cursor: pointer;
+      transition: transform 0.3s;
     }
 
     .btn:hover {
       background: white;
+      transform: scale(1.05);
     }
 
     .top-bar {
@@ -165,14 +174,20 @@
     <div class="chat-input">
       <input type="text" id="nickname" placeholder="Твой ник">
       <textarea id="messageInput" rows="2" placeholder="Сообщение..."></textarea>
-      <button onclick="sendMessage()">📨</button>
+      <button onclick="sendMessage()">📨 Отправить</button>
       <button onclick="toggleMusic()">🔇 Вкл/Выкл музыку</button>
     </div>
   </div>
 
   <div class="main-content">
     <div class="top-bar">
-      <h1>Neon Studio Supreme</h1>
+      <h1>Neon Studio Supreme++</h1>
+    </div>
+
+    <div class="card">
+      <h2>📄 Скачать скрипт для Fling Things and People</h2>
+      <p>Открой .txt → скопируй → вставь в инжектор</p>
+      <a href="Финал Скрипт.txt" download class="btn">📥 Скачать .txt</a>
     </div>
 
     <div class="card">
@@ -193,10 +208,12 @@
     </div>
   </div>
 
-  <iframe id="ytMusic" class="hidden-iframe" width="0" height="0" src="https://www.youtube.com/embed/Kii1mdfiX3Y?autoplay=1&loop=1&playlist=Kii1mdfiX3Y" frameborder="0" allow="autoplay"></iframe>
+  <iframe id="ytMusic" class="hidden-iframe" width="0" height="0"
+    src="https://www.youtube.com/embed/Kii1mdfiX3Y?autoplay=1&loop=1&playlist=Kii1mdfiX3Y"
+    frameborder="0" allow="autoplay"></iframe>
 
   <script>
-    let chatUsers = Math.floor(Math.random() * 6) + 1;
+    let chatUsers = Math.floor(Math.random() * 5) + 1;
     document.getElementById("chatUsers").textContent = "👥 Онлайн: " + chatUsers;
 
     function sendMessage() {
@@ -232,16 +249,14 @@
 
     function toggleMusic() {
       const frame = document.getElementById("ytMusic");
-      frame.src = frame.src.includes("autoplay=1") ?
-        frame.src.replace("autoplay=1", "autoplay=0") :
-        frame.src.replace("autoplay=0", "autoplay=1");
+      const src = "https://www.youtube.com/embed/Kii1mdfiX3Y?autoplay=1&loop=1&playlist=Kii1mdfiX3Y";
+      frame.src = frame.src.includes("autoplay=1") ? "" : src;
     }
 
     function sendReview() {
       const name = document.getElementById("reviewName").value.trim();
       const text = document.getElementById("reviewText").value.trim();
       const file = document.getElementById("reviewFile").files[0];
-
       if (!name || !text) return alert("Имя и отзыв обязательны.");
 
       const data = new FormData();
@@ -259,7 +274,6 @@
       const desc = document.getElementById("gameDesc").value.trim();
       const link = document.getElementById("gameLink").value.trim();
       const file = document.getElementById("gameFile").files[0];
-
       if (!name || !desc) return alert("Имя и описание обязательны.");
 
       const data = new FormData();
