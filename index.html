@@ -11,9 +11,7 @@
       background-size: 800% 800%;
       animation: animatedBG 20s ease infinite;
       color: white;
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
     @keyframes animatedBG {
@@ -22,264 +20,223 @@
       100% { background-position: 0% 50%; }
     }
 
-    .chat-container {
-      width: 250px;
-      background: rgba(20, 20, 40, 0.95);
-      border-right: 2px solid #9f6bff;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 0 20px #9f6bff88;
+    h1 {
+      text-align: center;
+      margin-top: 40px;
+      color: #9f6bff;
+      text-shadow: 0 0 10px #9f6bff;
     }
 
-    .chat-header {
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid #9f6bff;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 25px #9f6bff55;
+    }
+
+    .card h2 {
+      color: #9f6bff;
+      margin-top: 0;
+    }
+
+    input, textarea {
+      width: 100%;
       padding: 10px;
+      background: #111;
+      color: #fff;
+      border: 1px solid #9f6bff;
+      border-radius: 8px;
+      margin-top: 8px;
+    }
+
+    .btn {
       background: #9f6bff;
       color: #000;
-      font-weight: bold;
-      text-align: center;
-      font-size: 14px;
-    }
-
-    .chat-messages {
-      flex: 1;
-      padding: 8px;
-      overflow-y: auto;
-      font-size: 0.8em;
-      max-height: 250px;
-    }
-
-    .chat-input {
-      padding: 8px;
-      border-top: 1px solid #9f6bff;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .chat-input input,
-    .chat-input textarea {
-      background: #111;
-      border: 1px solid #9f6bff;
-      border-radius: 6px;
-      color: white;
-      padding: 5px;
-      font-size: 0.8em;
-    }
-
-    .chat-input button {
-      padding: 5px;
+      padding: 10px 16px;
       border: none;
-      background: #9f6bff;
-      color: black;
+      border-radius: 8px;
+      margin-top: 10px;
       font-weight: bold;
-      border-radius: 6px;
       cursor: pointer;
-      font-size: 0.8em;
-      transition: transform 0.2s;
+      transition: transform 0.2s ease;
     }
 
-    .chat-input button:hover {
-      background: white;
+    .btn:hover {
       transform: scale(1.05);
+      background: white;
+    }
+
+    #chatBox {
+      max-height: 300px;
+      overflow-y: auto;
+      background: rgba(255,255,255,0.03);
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #9f6bff;
     }
 
     .message {
-      margin-bottom: 6px;
+      margin-bottom: 10px;
+      padding: 8px;
       background: rgba(255,255,255,0.08);
-      padding: 4px 6px;
       border-left: 3px solid #9f6bff;
       border-radius: 6px;
-      box-shadow: 0 0 5px #9f6bff55;
     }
 
     .message strong {
       color: #9f6bff;
     }
 
-    .main-content {
-      flex: 1;
-      padding: 15px;
-      overflow-y: auto;
-    }
-
-    .card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid #9f6bff;
-      border-radius: 10px;
-      padding: 12px;
-      margin-bottom: 15px;
-      transition: transform 0.3s ease;
-    }
-
-    .card:hover {
-      transform: scale(1.03);
-    }
-
-    .card h2 {
-      font-size: 1.1em;
-      margin-bottom: 8px;
-      color: #9f6bff;
-    }
-
-    input, textarea {
-      width: 100%;
-      background: #111;
-      border: 1px solid #9f6bff;
-      color: white;
-      border-radius: 6px;
-      padding: 6px;
-      margin: 4px 0;
-      font-size: 0.85em;
-    }
-
-    .btn {
-      padding: 6px 12px;
-      background: #9f6bff;
-      border: none;
-      color: black;
-      font-weight: bold;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.85em;
-      transition: transform 0.3s;
-    }
-
-    .btn:hover {
-      background: white;
-      transform: scale(1.05);
-    }
-
-    .counter {
-      font-size: 0.8em;
-      color: #aaa;
-    }
-
-    .hidden-iframe {
+    iframe {
       display: none;
     }
   </style>
 </head>
 <body>
+  <h1>Neon Studio</h1>
+  <div class="container">
 
-  <div class="chat-container">
-    <div class="chat-header">
-      💬 Neon Chat<br>
-      <span class="counter" id="chatUsers">👥 Онлайн: 0</span>
-    </div>
-    <div class="chat-messages" id="chatBox"></div>
-    <div class="chat-input">
-      <input type="text" id="nickname" placeholder="Ник">
-      <textarea id="messageInput" rows="2" placeholder="Сообщение..."></textarea>
-      <button onclick="sendMessage()">📨</button>
-      <button onclick="playMusic()">▶️ Включить музыку</button>
-    </div>
-  </div>
-
-  <div class="main-content">
-    <h1 style="margin-top:0;">Neon Studio</h1>
-
+    <!-- ЧАТ -->
     <div class="card">
-      <h2>📥 Скачать скрипт (.txt)</h2>
-      <p>Скопируй из .txt → вставь в инжектор</p>
-      <a href="Финал Скрипт.txt" download class="btn">Скачать</a>
+      <h2>💬 Чат</h2>
+      <input type="text" id="nickname" placeholder="Твой никнейм">
+      <textarea id="messageInput" placeholder="Сообщение..." rows="2"></textarea>
+      <button class="btn" onclick="sendMessage()">📨 Отправить</button>
+      <div id="chatBox"></div>
     </div>
 
+    <!-- КНОПКА МУЗЫКИ -->
     <div class="card">
-      <h2>📣 Отзыв</h2>
-      <input type="text" id="reviewName" placeholder="Твоё имя">
-      <textarea id="reviewText" placeholder="Оставь отзыв..."></textarea>
-      <input type="file" id="reviewFile" accept="image/*">
-      <button class="btn" onclick="sendReview()">Отправить</button>
+      <h2>🎵 Фоновая музыка</h2>
+      <button class="btn" onclick="playMusic()">▶️ Включить музыку</button>
     </div>
 
+    <!-- СКРИПТ -->
+    <div class="card">
+      <h2>📥 Скачать скрипт</h2>
+      <p>Открой .txt файл и вставь в инжектор</p>
+      <a href="Финал Скрипт.txt" download class="btn">📄 Скачать .txt</a>
+    </div>
+
+    <!-- ОТЗЫВ -->
+    <div class="card">
+      <h2>📝 Оставить отзыв</h2>
+      <input type="text" id="reviewName" placeholder="Ваше имя/никнейм">
+      <textarea id="reviewText" placeholder="Твой отзыв..."></textarea>
+      <input type="file" id="reviewFile">
+      <button class="btn" onclick="sendReview()">Отправить отзыв</button>
+    </div>
+
+    <!-- ИГРА ОТ ПОДПИСЧИКА -->
     <div class="card">
       <h2>🎮 Игра от подписчика</h2>
-      <input type="text" id="gameName" placeholder="Имя">
+      <input type="text" id="gameName" placeholder="Ваше имя/никнейм">
       <textarea id="gameDesc" placeholder="Описание игры..."></textarea>
-      <input type="text" id="gameLink" placeholder="Ссылка (Яндекс, Mega и т.п.)">
+      <input type="text" id="gameLink" placeholder="Ссылка (Google/Mega и т.п.)">
       <input type="file" id="gameFile">
-      <button class="btn" onclick="sendGame()">Отправить</button>
+      <button class="btn" onclick="sendGame()">Отправить игру</button>
     </div>
+
+    <!-- БАГИ -->
+    <div class="card">
+      <h2>🐞 Сообщить о баге</h2>
+      <input type="text" id="bugName" placeholder="Ваше имя/никнейм">
+      <textarea id="bugDesc" placeholder="Опишите где баг (в игре, сайте и т.д.)"></textarea>
+      <input type="file" id="bugFile">
+      <button class="btn" onclick="sendBug()">Отправить баг</button>
+    </div>
+
+    <!-- ВОПРОС/ИДЕЯ -->
+    <div class="card">
+      <h2>💡 Вопрос или идея</h2>
+      <input type="text" id="ideaName" placeholder="Ваше имя/никнейм">
+      <textarea id="ideaText" placeholder="Какой вопрос или идею хотите написать?"></textarea>
+      <input type="file" id="ideaFile">
+      <button class="btn" onclick="sendIdea()">Отправить</button>
+    </div>
+
   </div>
 
-  <iframe id="ytMusic" class="hidden-iframe"
-    src=""
-    allow="autoplay" frameborder="0"></iframe>
+  <iframe id="ytMusic" src="" allow="autoplay" frameborder="0"></iframe>
 
-  <script>
-    let chatUsers = Math.floor(Math.random() * 5) + 1;
-    document.getElementById("chatUsers").textContent = "👥 Онлайн: " + chatUsers;
+<script>
+  function sendMessage() {
+    const nick = document.getElementById("nickname").value.trim();
+    const msg = document.getElementById("messageInput").value.trim();
+    if (!nick || !msg) return alert("Введите имя и сообщение!");
+    const box = document.getElementById("chatBox");
+    const time = new Date().toLocaleTimeString();
+    const div = document.createElement("div");
+    div.className = "message";
+    div.innerHTML = `<strong>${nick}</strong> <small>${time}</small><br>${msg}`;
+    box.appendChild(div);
+    box.scrollTop = box.scrollHeight;
+    document.getElementById("messageInput").value = "";
+  }
 
-    function sendMessage() {
-      const nick = document.getElementById("nickname").value.trim();
-      const msg = document.getElementById("messageInput").value.trim();
-      if (!nick || !msg) return alert("Введите имя и сообщение!");
-      const fullMsg = { user: nick, text: msg, time: Date.now() };
-      saveMessage(fullMsg);
-      displayMessage(fullMsg);
-      document.getElementById("messageInput").value = "";
-    }
+  function playMusic() {
+    document.getElementById("ytMusic").src = "https://www.youtube.com/embed/Kii1mdfiX3Y?autoplay=1&loop=1&playlist=Kii1mdfiX3Y";
+  }
 
-    function saveMessage(msg) {
-      const history = JSON.parse(localStorage.getItem("chatHistory") || "[]");
-      history.push(msg);
-      localStorage.setItem("chatHistory", JSON.stringify(history.slice(-100)));
-    }
+  function sendWebhook(nameId, textId, fileId, url) {
+    const name = document.getElementById(nameId).value.trim();
+    const text = document.getElementById(textId).value.trim();
+    const file = document.getElementById(fileId).files[0];
+    if (!name || !text) return alert("Заполните все поля");
 
-    function displayMessage(msg) {
-      const div = document.createElement("div");
-      div.className = "message";
-      const date = new Date(msg.time).toLocaleTimeString();
-      div.innerHTML = `<strong>${msg.user}</strong> <small>${date}</small><br>${msg.text}`;
-      document.getElementById("chatBox").appendChild(div);
-      document.getElementById("chatBox").scrollTop = document.getElementById("chatBox").scrollHeight;
-    }
+    const form = new FormData();
+    form.append("content", `От: ${name}\n${text}`);
+    if (file) form.append("file", file);
 
-    function loadMessages() {
-      const history = JSON.parse(localStorage.getItem("chatHistory") || "[]");
-      document.getElementById("chatBox").innerHTML = "";
-      history.forEach(displayMessage);
-    }
+    fetch(url, { method: "POST", body: form })
+      .then(r => alert(r.ok ? "Отправлено!" : "Ошибка отправки"));
+  }
 
-    function playMusic() {
-      document.getElementById("ytMusic").src = "https://www.youtube.com/embed/Kii1mdfiX3Y?autoplay=1&loop=1&playlist=Kii1mdfiX3Y";
-    }
+  function sendReview() {
+    sendWebhook("reviewName", "reviewText", "reviewFile",
+      "https://discord.com/api/webhooks/1396744730473136241/mZr3UP1-sVPwLbhknbssvEU5JYPbztIOJCn3OF8JzXVZJgGeoK63WecVkoW3L3ebCb5v");
+  }
 
-    function sendReview() {
-      const name = document.getElementById("reviewName").value.trim();
-      const text = document.getElementById("reviewText").value.trim();
-      const file = document.getElementById("reviewFile").files[0];
-      if (!name || !text) return alert("Имя и отзыв обязательны.");
+  function sendGame() {
+    const name = document.getElementById("gameName").value.trim();
+    const desc = document.getElementById("gameDesc").value.trim();
+    const link = document.getElementById("gameLink").value.trim();
+    const file = document.getElementById("gameFile").files[0];
+    if (!name || !desc) return alert("Имя и описание обязательны.");
 
-      const data = new FormData();
-      data.append("content", `📝 Отзыв от: ${name}\n${text}`);
-      if (file) data.append("file", file);
+    const content = `🎮 Игра от: ${name}\nОписание: ${desc}${link ? "\n🔗 Ссылка: " + link : ""}`;
+    const form = new FormData();
+    form.append("content", content);
+    if (file) form.append("file", file);
 
-      fetch("https://discord.com/api/webhooks/1396744730473136241/mZr3UP1-sVPwLbhknbssvEU5JYPbztIOJCn3OF8JzXVZJgGeoK63WecVkoW3L3ebCb5v", {
-        method: "POST", body: data
-      }).then(r => alert(r.ok ? "Отправлено!" : "Ошибка отправки"));
-    }
+    fetch("https://discord.com/api/webhooks/1396753674805448814/nz56x-Grxu7JQ4k0SwW6ansdQlKuSuCzczVQodm2AZ6asTvLJ_i2IJNBDv5JqdUlOPbE", {
+      method: "POST", body: form
+    }).then(r => alert(r.ok ? "Игра отправлена!" : "Ошибка отправки"));
+  }
 
-    function sendGame() {
-      const name = document.getElementById("gameName").value.trim();
-      const desc = document.getElementById("gameDesc").value.trim();
-      const link = document.getElementById("gameLink").value.trim();
-      const file = document.getElementById("gameFile").files[0];
-      if (!name || !desc) return alert("Имя и описание обязательны.");
+  function sendBug() {
+    sendWebhook("bugName", "bugDesc", "bugFile",
+      "https://discord.com/api/webhooks/1396858162979799173/1pjXR2m9ZN9-F4ipPrROyqplzu-RB95wtrx7y5EfWAJ6dB_1GnLgJLZ_5KDosacfxRrn");
+  }
 
-      const data = new FormData();
-      let content = `🎮 Игра от: ${name}\nОписание: ${desc}`;
-      if (link) content += `\n🔗 Ссылка: ${link}`;
-      data.append("content", content);
-      if (file) data.append("file", file);
-
-      fetch("https://discord.com/api/webhooks/1396753674805448814/nz56x-Grxu7JQ4k0SwW6ansdQlKuSuCzczVQodm2AZ6asTvLJ_i2IJNBDv5JqdUlOPbE", {
-        method: "POST", body: data
-      }).then(r => alert(r.ok ? "Игра отправлена!" : "Ошибка отправки"));
-    }
-
-    loadMessages();
-  </script>
+  function sendIdea() {
+    sendWebhook("ideaName", "ideaText", "ideaFile",
+      "https://discord.com/api/webhooks/1396858162979799173/1pjXR2m9ZN9-F4ipPrROyqplzu-RB95wtrx7y5EfWAJ6dB_1GnLgJLZ_5KDosacfxRrn");
+  }
+</script>
 
 </body>
 </html>
