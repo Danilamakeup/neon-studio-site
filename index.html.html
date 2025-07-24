@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Neon Studio</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      color: #fff;
+      text-align: center;
+      background: linear-gradient(270deg, #0a0a1a, #1a0033, #220044, #0a0a1a);
+      background-size: 800% 800%;
+      animation: animatedBackground 20s ease infinite;
+    }
+
+    @keyframes animatedBackground {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-top: 60px;
+      color: #9f6bff;
+      text-shadow: 0 0 10px #9f6bff, 0 0 20px #9f6bff;
+    }
+
+    .section {
+      margin: 60px auto;
+      max-width: 800px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid #9f6bff;
+      border-radius: 16px;
+      padding: 20px;
+      margin: 20px;
+      box-shadow: 0 0 15px #9f6bff;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .copy-button, .download-button, .lang-button, .support-button {
+      background: transparent;
+      color: #9f6bff;
+      border: 1px solid #9f6bff;
+      border-radius: 8px;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-size: 0.95em;
+      margin: 10px 5px;
+      transition: 0.3s ease;
+    }
+
+    .copy-button:hover, .download-button:hover, .lang-button:hover, .support-button:hover {
+      background: #9f6bff;
+      color: #000;
+      transform: scale(1.05);
+    }
+
+    .lang-button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 999;
+    }
+
+    .socials a {
+      display: block;
+      margin: 10px auto;
+      font-size: 1.2em;
+      color: #9f6bff;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+
+    .socials a:hover {
+      color: #fff;
+      text-shadow: 0 0 10px #9f6bff;
+    }
+
+    /* Popup отзыв */
+    .support-popup {
+      display: none;
+      position: fixed;
+      bottom: 90px;
+      right: 30px;
+      width: 320px;
+      background: rgba(10, 10, 30, 0.95);
+      border: 1px solid #9f6bff;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 0 20px #9f6bff;
+      z-index: 1001;
+      color: white;
+      text-align: left;
+      opacity: 0;
+      transform: scale(0.9);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .support-popup.show {
+      display: block;
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .popup-close {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      color: #9f6bff;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .support-popup input,
+    .support-popup textarea,
+    .support-popup input[type="file"] {
+      width: 100%;
+      margin: 10px 0;
+      background: #111;
+      color: #fff;
+      border: 1px solid #9f6bff;
+      border-radius: 10px;
+      padding: 8px;
+    }
+
+    .support-floating-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #9f6bff;
+      color: #000;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 10px #9f6bff;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Переключение языка -->
+  <button class="lang-button" onclick="alert('Языковая версия пока в разработке')">🌐 RU / EN</button>
+
+  <h1>Neon Studio</h1>
+
+  <div class="section">
+    <div class="card">
+      <h2>Моё творчество</h2>
+      <p>Здесь появляются арты, музыка и безумие 🧠</p>
+    </div>
+
+    <div class="card">
+      <h2>Связь со мной</h2>
+      <div class="socials">
+        <a href="https://discord.gg/yqeUjjGX" target="_blank">🌐 Discord сервер: Neon Studio</a>
+        <button class="copy-button" onclick="copyToClipboard('https://discord.gg/yqeUjjGX')">Скопировать ссылку</button>
+
+        <a href="https://www.youtube.com/@bmw30csl" target="_blank">▶️ YouTube: @bmw30csl</a>
+        <button class="copy-button" onclick="copyToClipboard('https://www.youtube.com/@bmw30csl')">Скопировать ссылку</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Скачать скрипт для Fling Things and People</h2>
+      <p>🔥 Полный скрипт с ESP и GUI для Roblox</p>
+      <a href="Финал Скрипт.txt" download class="download-button">📥 Скачать .txt</a>
+    </div>
+
+    <div class="card">
+      <h2>Игры от подписчиков 🎮</h2>
+      <input type="text" id="gameAuthor" placeholder="Твоё имя / никнейм">
+      <textarea id="gameDesc" placeholder="Описание игры..."></textarea>
+      <input type="text" id="gameLink" placeholder="Ссылка на игру (Я.Диск / Mega / Google)">
+      <label style="font-size: 0.9em;">Или прикрепи файл (до 10 МБ):</label>
+      <input type="file" id="gameFile" accept=".zip,.rar,.exe">
+      <button class="support-button" onclick="sendGame()">Отправить игру</button>
+    </div>
+  </div>
+
+  <!-- Кнопка отзыва -->
+  <button class="support-floating-btn" onclick="togglePopup()">✉️ Написать отзыв</button>
+
+  <!-- Popup -->
+  <div class="support-popup" id="supportPopup">
+    <div class="popup-close" onclick="togglePopup()">✖</div>
+    <h3>Напиши отзыв</h3>
+    <input type="text" id="popupName" placeholder="Твоё имя">
+    <textarea id="popupMessage" placeholder="Что думаешь о сайте?"></textarea>
+    <label style="font-size: 0.9em;">Прикрепить скриншот (необязательно):</label>
+    <input type="file" id="popupImage" accept="image/*">
+    <button class="support-button" onclick="sendSupport()">Отправить отзыв</button>
+  </div>
+
+  <!-- Скрипт -->
+  <script>
+    function togglePopup() {
+      const popup = document.getElementById("supportPopup");
+      if (popup.classList.contains("show")) {
+        popup.classList.remove("show");
+        setTimeout(() => popup.style.display = "none", 300);
+      } else {
+        popup.style.display = "block";
+        setTimeout(() => popup.classList.add("show"), 10);
+      }
+    }
+
+    function sendSupport() {
+      const username = document.getElementById("popupName").value.trim();
+      const message = document.getElementById("popupMessage").value.trim();
+      const fileInput = document.getElementById("popupImage");
+
+      if (!username || !message) {
+        alert("Заполни имя и отзыв.");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("content", `📝 Отзыв от: **${username}**\n${message}`);
+
+      if (fileInput.files.length > 0) {
+        formData.append("file", fileInput.files[0]);
+      }
+
+      fetch("https://discord.com/api/webhooks/1396744730473136241/mZr3UP1-sVPwLbhknbssvEU5JYPbztIOJCn3OF8JzXVZJgGeoK63WecVkoW3L3ebCb5v", {
+        method: "POST",
+        body: formData
+      }).then(res => {
+        if (res.ok) {
+          alert("Спасибо за отзыв! ✅");
+          togglePopup();
+        } else {
+          alert("Ошибка при отправке отзыва 😢");
+        }
+      }).catch(() => alert("Ошибка соединения."));
+    }
+
+    function sendGame() {
+      const author = document.getElementById("gameAuthor").value.trim();
+      const desc = document.getElementById("gameDesc").value.trim();
+      const link = document.getElementById("gameLink").value.trim();
+      const file = document.getElementById("gameFile").files[0];
+
+      if (!author || !desc) {
+        alert("Имя и описание обязательны.");
+        return;
+      }
+
+      const formData = new FormData();
+      let content = `🎮 Игра от **${author}**\nОписание: ${desc}`;
+      if (link) content += `\n🔗 Ссылка: ${link}`;
+      formData.append("content", content);
+
+      if (file) {
+        if (file.size > 10 * 1024 * 1024) {
+          alert("Файл больше 10 МБ!");
+          return;
+        }
+        formData.append("file", file);
+      }
+
+      fetch("https://discord.com/api/webhooks/1396753674805448814/nz56x-Grxu7JQ4k0SwW6ansdQlKuSuCzczVQodm2AZ6asTvLJ_i2IJNBDv5JqdUlOPbE", {
+        method: "POST",
+        body: formData
+      }).then(res => {
+        if (res.ok) {
+          alert("Игра отправлена, спасибо! 🎮");
+        } else {
+          alert("Ошибка при отправке.");
+        }
+      }).catch(() => alert("Ошибка соединения."));
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Скопировано в буфер 📋");
+      }).catch(() => {
+        alert("Не удалось скопировать.");
+      });
+    }
+  </script>
+
+</body>
+</html>
